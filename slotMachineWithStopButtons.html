@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> slotMachine </title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div id = "main">
+ <div id = "displayed">
+  <div id = "img1">
+  </div>
+
+  <div id = "img2">
+  </div>
+
+  <div id = "img3">
+  </div>
+
+  <div id = "buttons">
+    <button type="button" class="btn btn-primary" onclick="play()">play</button>
+    <button type="button" class="btn btn-primary" onclick="stop1()">stop first</button>
+    <button type="button" class="btn btn-primary" onclick="stop2()">stop second</button>
+    <button type="button" class="btn btn-primary" onclick="stop3()">stop third</button>
+  </div>
+</div>
+
+ <div id = "notDisplayed">
+  <div id = "img1next">
+  </div>
+
+  <div id = "img2next">
+  </div>
+
+  <div id = "img3next">
+  </div>
+ </div>
+ </div>
+
+ <script>
+
+  function getRandomNum() {
+   return Math.floor(Math.random() * 9);
+  }
+
+  var countImg1 = getRandomNum();
+  var countImg2 = getRandomNum();
+  var countImg3 = getRandomNum();
+
+  function getLeft(count) {
+   return (count%3) * -147;
+  }
+  function getTop(count) {
+   return Math.floor(count/3) * -145;
+  }
+
+  var img1Left = getLeft(countImg1);
+  var img1Top = getTop(countImg1);
+  var img2Left = getLeft(countImg2);
+  var img2Top = getTop(countImg2);
+  var img3Left = getLeft(countImg3);
+  var img3Top = getTop(countImg3);
+
+  var nextImg1Left = getLeft(countImg1+1);
+  var nextImg1Top = getTop(countImg1+1);
+  var nextImg2Left = getLeft(countImg2+1);
+  var nextImg2Top = getTop(countImg2+1);
+  var nextImg3Left = getLeft(countImg3+1);
+  var nextImg3Top = getTop(countImg3+1);
+
+  function getStr(imgleft, imgtop) {
+   return "url(icons.jpg) "+imgleft+"px "+imgtop+"px";
+  }
+
+  var img1str = getStr(img1Left, img1Top);
+  $("#img1").css({"background":img1str});
+  var img2str = getStr(img2Left, img2Top);
+  $("#img2").css({"background":img2str});
+  var img3str = getStr(img3Left, img3Top);
+  $("#img3").css({"background":img3str});
+
+  var nextImg1str = getStr(nextImg1Left, nextImg1Top);
+  $("#img1next").css({"background":nextImg1str});
+  var nextImg2str = getStr(nextImg2Left, nextImg2Top);
+  $("#img2next").css({"background":nextImg2str});
+  var nextImg3str = getStr(nextImg3Left, nextImg3Top);
+  $("#img3next").css({"background":nextImg3str});
+
+  var stopfirst = false; var stopsecond = false; var stopthird = false;
+  var playing = false;
+
+  function play() {
+   if (!playing) {
+    if(stopfirst) {stopfirst = false;}
+    if(stopsecond) {stopsecond = false;}
+    if(stopthird) {stopthird = false;}
+    playImg1();
+    playImg2();
+    playImg3();
+    playing = true;
+   }
+  }
+
+  function stop1() {
+   stopfirst = true;
+   if ((playing == true) && (stopsecond == true) && (stopthird == true)) {
+     playing = false;
+   }
+  }
+
+  function stop2() {
+   stopsecond = true;
+   if ((playing == true) && (stopfirst == true) && (stopthird == true)) {
+     playing = false;
+   }
+  }
+
+  function stop3() {
+   stopthird = true;
+   if ((playing == true) && (stopfirst == true) && (stopsecond == true)) {
+     playing = false;
+   }
+  }
+
+  function playImg1() {
+   $("#img1").animate({bottom:'133px'},100).delay(1).animate({bottom:"0"},1);
+   $("#img1next").animate({bottom:'133px'},100).delay(1).animate({bottom:"0"},1);
+   setTimeout(playAfterTimeOut1,120);
+   if (stopfirst) { return 0; }
+   else { setTimeout(function() {playImg1()}, 150); }
+  }
+
+  function playImg2() {
+    $("#img2").animate({bottom:'133px'},100).delay(1).animate({bottom:"0"},1);
+    $("#img2next").animate({bottom:'133px'},100).delay(1).animate({bottom:"0"},1);
+    setTimeout(playAfterTimeOut2,120);
+   if (stopsecond) { return 0; }
+   else { setTimeout(function() {playImg2()}, 150); }
+  }
+
+  function playImg3() {
+    $("#img3").animate({bottom:'133px'},100).delay(1).animate({bottom:"0"},1);
+    $("#img3next").animate({bottom:'133px'},100).delay(1).animate({bottom:"0"},1);
+    setTimeout(playAfterTimeOut3,120);
+   if (stopthird) { return 0; }
+   else { setTimeout(function() {playImg3()}, 150); }
+  }
+
+  function playAfterTimeOut1() {
+   countImg1++;
+   if(countImg1==9) {countImg1 = 0;}
+   nextImg1str = $("#img1next").css("background");
+   $("#img1").css({"background":nextImg1str});
+
+   nextImg1Left = getLeft(countImg1);
+   nextImg1Top = getTop(countImg1);
+   nextImg1nextstr = getStr(nextImg1Left, nextImg1Top);
+   $("#img1next").css({"background":nextImg1nextstr});
+  }
+
+  function playAfterTimeOut2() {
+   countImg2++;
+   if(countImg2==9) {countImg2 = 0;}
+   nextImg2str = $("#img2next").css("background");
+   $("#img2").css({"background":nextImg2str});
+
+   nextImg2Left = getLeft(countImg2);
+   nextImg2Top = getTop(countImg2);
+   nextImg2nextstr = getStr(nextImg2Left, nextImg2Top);
+   $("#img2next").css({"background":nextImg2nextstr});
+  }
+
+  function playAfterTimeOut3() {
+   countImg3++;
+   if(countImg3==9) {countImg3 = 0;}
+   nextImg3str = $("#img3next").css("background");
+   $("#img3").css({"background":nextImg3str});
+
+   nextImg3Left = getLeft(countImg3);
+   nextImg3Top = getTop(countImg3);
+   nextImg3nextstr = getStr(nextImg3Left, nextImg3Top);
+   $("#img3next").css({"background":nextImg3nextstr});
+  }
+
+</script>
+
+</body>
+</html>
